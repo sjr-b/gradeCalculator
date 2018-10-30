@@ -7,32 +7,48 @@ function onLoad(){
 
 // addRow() Adds a new category/weight row (up to 6)
 function addRow(){
-    var row = document.createElement("tr");
+    // these are the variables
+    var firstRow = document.createElement("tr");
     var firstData = document.createElement("td");
-    var emptyBetween = document.createElement("td");
+    firstData.setAttribute("class", "catTitle");
     var secondData = document.createElement("td");
-    var categoryTitle = document.getElementsByTagName("input").value;
-    document.getElementById("categories").appendChild(row);
-    row.appendChild(firstData);
-    row.appendChild(emptyBetween);
-    row.appendChild(secondData);
-    firstData.innerHTML = categoryTitle;
-    firstData.innerText = "test";
+    if (document.getElementById("categoryTitle").value == ""){
+        var categoryTitle = "Homework"
+    } else {
+        var categoryTitle = document.getElementById("categoryTitle").value;
+    }
+    secondData.setAttribute("class", "perTitle")
+    var secondRow = document.createElement("tr");
+    var secondFirstData = document.createElement("tr");
+    var secondSecondData = document.createElement("tr");
+    var inputScores = document.createElement("input");
+    inputScores.setAttribute("id", categoryTitle + "scores");
+    inputScores.setAttribute("class", "inp");
+    var inputWeight = document.createElement("input");
+    inputWeight.setAttribute("id", categoryTitle + "weight");
+    inputWeight.setAttribute("class", "inp");
+
+    // this is where everything in the first row is appended
+    document.getElementById("categories").appendChild(firstRow);
+    firstRow.appendChild(firstData);
+    firstRow.appendChild(secondData);
+
+    // this is where everything in the second row is appended
+    document.getElementById("categories").appendChild(secondRow);
+    secondRow.appendChild(secondFirstData);
+    secondRow.appendChild(secondSecondData);
+    secondFirstData.appendChild(inputScores);
+    secondSecondData.appendChild(inputWeight);
+
+    // this is where everything is styled
+    document.getElementById("categories").style.border = "2px solid black";
+    firstData.innerHTML = categoryTitle + " Scores";
     secondData.innerText = "Percentage";
-    firstData.style.backgroundColor = "red";
-    firstData.style.length = "25px";
-    secondData.style.backgroundColor = "red";
+    firstData.style.border = "1px dashed black";
+    secondData.style.border = "1px dashed black";
 
-    var buttonPlace = document.getElementById("firstBreak");
-    var button = document.createElement("button");
-    var buttonMessage = document.createTextNode("Add A Category");
-    document.insertBefore(buttonPlace, button);
-    button.innerHTML = buttonMessage;
-
-    var textInput = document.createElement("input");
-    textInput.setAttribute("type", "text");
-    textInput.setAttribute("value", "");
-    button.insertBefore(button, textInput);
+    // this is how the category title input is reset.
+    document.getElementById("categoryTitle").value = "";
 }
 
 /* convertArrayStringToNumber(string) → takes a string of comma separated values (from page) and returns it as an array of
@@ -58,3 +74,5 @@ the math to determine what the user needs on the final. */
 function calculateGradeNeeded(){
 
 }
+
+// This function makes sure that addRun

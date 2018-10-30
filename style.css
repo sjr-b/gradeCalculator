@@ -1,3 +1,4 @@
-.td {
-    border: 1px solid black;
+.catTitle, .perTitle, .inp {
+    text-align: left;
+    width: 50%;
 }
