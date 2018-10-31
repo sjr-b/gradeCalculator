@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <title>Grade Calculator</title>
     <script src = "script.js"></script>
-    <link rel = "stylesheet" href = "https://www.w3schools.com/w3css/4/w3.css">
+    <link rel = "stylesheet" href = "https://getbootstrap.com/docs/3.3/css/">
+    <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload = onLoad()>
 <table id = "categories"></table>
-<input type="text" id="myField" value="" size="25"><button id = "button">Add Another Category</button>
-<br id = "firstBreak">
+<input type ="text" id="categoryTitle" value="" size="25"><button id = "addCategory" onclick = addRow()>Add Another Category</button>
+<br>
+<button id = "currentGrade">Calculate Grade</button>
+<br>
+<button id = "requiredGrade">Calculate Grade Required</button>
+<br>
+<input type = "text" id = "test" value = ""><button id = "runTest" onclick = convertArrayStringToNumber()>test</button>
+<p id = "testResult"></p>
 </body>
 </html>

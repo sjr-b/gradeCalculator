@@ -1,3 +1,15 @@
-.td {
-    border: 1px solid black;
+#categories{
+    border: 2px solid black;
 }
+
+.title {
+    text-align: left;
+    width: 50%;
+    border: 1px dashed black;
+}
+
+.input {
+    text-align: left;
+    display: inline;
+}
+
