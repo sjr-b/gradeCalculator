@@ -9,6 +9,13 @@
 </head>
 <body onload = onLoad()>
 <table id = "categories"></table>
-<input type="text" id="categoryTitle" value="" size="25"><button id = "button" onclick = addRow()>Add Another Category</button>
+<input type ="text" id="categoryTitle" value="" size="25"><button id = "addCategory" onclick = addRow()>Add Another Category</button>
+<br>
+<button id = "currentGrade">Calculate Grade</button>
+<br>
+<button id = "requiredGrade">Calculate Grade Required</button>
+<br>
+<input type = "text" id = "test" value = ""><button id = "runTest" onclick = convertArrayStringToNumber()>test</button>
+<p id = "testResult"></p>
 </body>
 </html>
