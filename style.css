@@ -9,7 +9,7 @@ input {
     display: inline;
 }
 
-#categories{
+table {
     border: 2px solid black;
 }
 

@@ -1,15 +1,14 @@
 // NO GLOBAL VARIABLES. EVER. DON'T EVEN THINK ABOUT IT.
 
 // This is the automatic function, and happens when the page is loaded.
-    function onLoad(){
-        addRow();
-    }
+function onLoad(){
+    addRow();
+}
 
 // addRow() Adds a new category/weight row (up to 6)
 function addRow(){
     if (document.getElementById("categories").rows.length < 12){
         // these are the variables
-        var idNumber = document.getElementById("categories").rows.length / 2;
         var titleRow = document.createElement("tr");
         var firstTitle = document.createElement("td");
         firstTitle.setAttribute("class", "title");
@@ -45,28 +44,19 @@ function addRow(){
         // this is where everything is given its names classes, and automatic values
         firstTitle.innerHTML = categoryTitle + " Scores";
         secondTitle.innerText = "Percentage Weight";
-        scoreInput.setAttribute("value", "24,42,66");
-        if (idNumber == 0){
-            weightInput.setAttribute("value", "10");
-        } else {
-            weightInput.setAttribute("value", "18");
+        scoreInput.setAttribute("value", "1,3,24,40,42,66,67"); // These are the uniform numbers of (in order, with the exception of 67) Pee Wee Reese, Babe Ruth, Willie Mays, Brian Fuentes, Jackie Robinson, and Yasiel Puig. 67 is the number of seasons that Vin Scully called the Dodgers.
+        var weights = document.getElementsByClassName("weight");
+        var rowNumber = document.getElementsByClassName("weight").length;
+        for (var i = 0; i < rowNumber; i++) {
+            weights[i].value = 100 / rowNumber;
         }
     }
-}
-
-function currentButton(){
-    var currentGrade = calculateCurrentGrade();
-    document.getElementById("currentResult").value = currentGrade;
-}
-
-function neededButton(){
-
 }
 
 /* calculateGradeNeeded() → takes the current grade returned by calculateCurrentGrade() and the grade desired and does
 the math to determine what the user needs on the final. */
 function calculateGradeNeeded(){
-
+    var currentGrade = calculateCurrentGrade();
 }
 
 /* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
@@ -74,7 +64,7 @@ back to page.  Also “return” the result so that calculateGradeNeeded() can u
 function calculateCurrentGrade(){
     var allScores = document.getElementsByClassName("score").value;
     var allWeights = document.getElementsByClassName("weight").value;
-    var sectionGrades = 0;
+    var currentGrade = 0;
     for (var i = 0; i < document.getElementById("categories") / 2; i++){
         var weightString = allWeights[i];
         var weightPercentage = convertArrayStringToNumber(weightString);
@@ -83,9 +73,10 @@ function calculateCurrentGrade(){
         var scoreListToArray = convertArrayStringToNumber(scoreList);
         var scoreAverage = averageArray(scoreListToArray);
         var result = scoreAverage * weight;
-        sectionGrades += result;
+        currentGrade += result;
     }
-
+    document.getElementById("currentResult").HTML = currentGrade;
+    return currentGrade;
 }
 
 // averageArray() → takes an array of numbers and returns the average of those numbers
@@ -105,7 +96,7 @@ function convertArrayStringToNumber(string){
     var array = [];
     var gatherArray = string.split(",");
     for (var i = 0; i < string.length; i++){
-        array[i] = parseInt(gatherArray([i]));
+        array[i] = parseInt(gatherArray[i]);
     }
     return array;
 }

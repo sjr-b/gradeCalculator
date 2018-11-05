@@ -10,12 +10,21 @@
 <body onload = onLoad()>
 <table id = "categories"></table>
 <br>
-<input type ="text" id="categoryTitle" value="" size="25"><button id = "addCategory" onclick = "addRow()">Add Another Category</button>
+<input type = "text" id= "categoryTitle" value = "" size= "25"> <button id = "addCategory" onclick = addRow()>Add Another Category</button>
 <br>
-<br>
-<button id = "currentGrade" onclick = "currentButton()">Calculate Grade</button>
+<button id = "currentGrade" onclick = calculateCurrentGrade()>Calculate Grade</button>
 <p id = "currentResult"></p>
-<button id = "requiredGrade" onclick = "neededButton()">Calculate Grade Required</button>
+<table>
+    <tr>
+        <td class = "title">Desired Final Grade</td>
+        <td class = "title">Final Weight</td>
+    </tr>
+    <tr>
+        <td><input id = "finalInfo" value = "90"></td>
+        <td><input id = "finalWeight" value = "20"></td>
+    </tr>
+</table>
+<button id = "requiredGrade" onclick = calculateGradeNeeded()>Calculate Grade Required</button>
 <p id = "requiredResult"></p>
 </body>
 </html>
