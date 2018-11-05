@@ -1,3 +1,14 @@
+* {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    text-align: left;
+    display: inline;
+}
+
 #categories{
     border: 2px solid black;
 }
@@ -7,9 +18,3 @@
     width: 50%;
     border: 1px dashed black;
 }
-
-.input {
-    text-align: left;
-    display: inline;
-}
-
