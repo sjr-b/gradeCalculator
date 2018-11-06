@@ -10,7 +10,7 @@ input {
 }
 
 table {
-    border: 2px solid black;
+    border: 2px solid darkcyan;
 }
 
 .title {

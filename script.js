@@ -9,6 +9,7 @@ function onLoad(){
 function addRow(){
     if (document.getElementById("categories").rows.length < 12){
         // these are the variables
+        var rowNumber = document.getElementById("categories").rows.length / 2;
         var titleRow = document.createElement("tr");
         var firstTitle = document.createElement("td");
         firstTitle.setAttribute("class", "title");
@@ -26,8 +27,10 @@ function addRow(){
         var secondInputContainer = document.createElement("td");
         var scoreInput = document.createElement("input");
         scoreInput.setAttribute("class", "score");
+        scoreInput.setAttribute("id", "s" + rowNumber);
         var weightInput = document.createElement("input");
         weightInput.setAttribute("class", "weight");
+        weightInput.setAttribute("id", "w" + rowNumber);
 
         // this is where everything in the first row is appended
         titleRow.appendChild(firstTitle);
@@ -59,23 +62,46 @@ function calculateGradeNeeded(){
     var currentGrade = calculateCurrentGrade();
 }
 
+// This is just a test function.
+function test(){
+    var rawScores = [];
+    for (var a = 0; a < document.getElementsByClassName("score").length; a++){
+        var individualScore = document.getElementById("s" + a).value;
+        rawScores[a] = individualScore;
+    }
+    for (var i = 0; i < rawScores.length; i++){
+        document.getElementById("testP").innerHTML += rawScores[i] + " . ";
+    }
+    // document.getElementById("testP").innerHTML = rawScores;
+}
+
 /* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
 back to page.  Also “return” the result so that calculateGradeNeeded() can use it. */
 function calculateCurrentGrade(){
-    var allScores = document.getElementsByClassName("score").value;
-    var allWeights = document.getElementsByClassName("weight").value;
-    var currentGrade = 0;
-    for (var i = 0; i < document.getElementById("categories") / 2; i++){
-        var weightString = allWeights[i];
-        var weightPercentage = convertArrayStringToNumber(weightString);
-        var weight = weightPercentage / 100;
-        var scoreList = allScores[i];
-        var scoreListToArray = convertArrayStringToNumber(scoreList);
-        var scoreAverage = averageArray(scoreListToArray);
-        var result = scoreAverage * weight;
-        currentGrade += result;
+    var rawScores = [];
+    for (var a = 0; a < document.getElementsByClassName("score").length; a++){
+        var individualScore = document.getElementById("s" + a).value;
+        rawScores[a] = individualScore;
     }
-    document.getElementById("currentResult").HTML = currentGrade;
+    var arrayScores = [];
+    for (var i = 0; i < rawScores.length; i++){
+        var numbers = convertArrayStringToNumber(rawScores);
+        var average = averageArray(numbers);
+        arrayScores[i] = average;
+    }
+
+    var rawWeights = [];
+    for (var b = 0; a < document.getElementsByClassName("weight").length; b++){
+        var individualWeight = document.getElementById("w" + b).value;
+        rawWeights[b] = individualWeight;
+    }
+    var arrayWeights = convertArrayStringToNumber(rawWeights);
+    var currentGrade = 0;
+    for (var j = 0; j < arrayScores; j++){
+        currentGrade += arrayScores[j] * arrayWeights[j] / 100;
+    }
+
+    document.getElementById("currentResult").innerHTML = "Your current grade is " + currentGrade;
     return currentGrade;
 }
 
@@ -93,8 +119,8 @@ function averageArray(array){
 numbers.  Use string.split(“,”)  to convert a string into an array of strings, then iterate through and convert each
 item in the array into a number like: array[i] = parseInt(array[i]) */
 function convertArrayStringToNumber(string){
-    var array = [];
     var gatherArray = string.split(",");
+    var array = [];
     for (var i = 0; i < string.length; i++){
         array[i] = parseInt(gatherArray[i]);
     }

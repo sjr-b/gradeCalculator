@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <title>Grade Calculator</title>
     <script src = "script.js"></script>
-    <link rel = "stylesheet" href = "https://getbootstrap.com/docs/3.3/css/">
+    <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel = "stylesheet" href = "style.css">
 </head>
 <body onload = onLoad()>
 <table id = "categories"></table>
 <br>
-<input type = "text" id= "categoryTitle" value = "" size= "25"> <button id = "addCategory" onclick = addRow()>Add Another Category</button>
+<input type = "text" id= "categoryTitle" value = "" size= "25"> <button class = "btn btn-info" id = "addCategory" onclick = "addRow()">Add Another Category</button>
 <br>
-<button id = "currentGrade" onclick = calculateCurrentGrade()>Calculate Grade</button>
+<p id = "testP"></p>
+<button class = "btm btn-danger" id = "testB" onclick = "test()">TEST</button>
+<button class = "btn btn-primary" id = "currentGrade" onclick = "calculateCurrentGrade()">Calculate Grade</button>
 <p id = "currentResult"></p>
 <table>
     <tr>
@@ -24,7 +26,7 @@
         <td><input id = "finalWeight" value = "20"></td>
     </tr>
 </table>
-<button id = "requiredGrade" onclick = calculateGradeNeeded()>Calculate Grade Required</button>
+<button class = "btn btn-primary" id = "requiredGrade" onclick = "calculateGradeNeeded()">Calculate Grade Required</button>
 <p id = "requiredResult"></p>
 </body>
 </html>
