@@ -12,9 +12,7 @@ function addRow(){
         var rowNumber = document.getElementById("categories").rows.length / 2;
         var titleRow = document.createElement("tr");
         var firstTitle = document.createElement("td");
-        firstTitle.setAttribute("class", "title");
         var secondTitle = document.createElement("td");
-        secondTitle.setAttribute("class", "title");
         if (document.getElementById("categoryTitle").value == ""){
             var categoryTitle = "Homework";
         } else {
@@ -58,19 +56,25 @@ function addRow(){
 
 /* calculateGradeNeeded() → takes the current grade returned by calculateCurrentGrade() and the grade desired and does
 the math to determine what the user needs on the final. */
-function calculateGradeNeeded(){
+/*function calculateGradeNeeded(){
     var currentGrade = calculateCurrentGrade();
-}
+}*/
 
 // This is just a test function.
 function test(){
+    document.getElementById("testP").innerHTML = "";
     var rawScores = [];
     for (var a = 0; a < document.getElementsByClassName("score").length; a++){
         var individualScore = document.getElementById("s" + a).value;
         rawScores[a] = individualScore;
     }
+    var arrayScores = [];
+    for (var b = 0; b < rawScores.length; b++){
+        var numbers = convertArrayStringToNumber(rawScores);
+        arrayScores[b] = averageArray(numbers);
+    }
     for (var i = 0; i < rawScores.length; i++){
-        document.getElementById("testP").innerHTML += rawScores[i] + " . ";
+        document.getElementById("testP").innerHTML += rawScores[i] + " " + arrayScores[i] + " || ";
     }
     // document.getElementById("testP").innerHTML = rawScores;
 }
@@ -78,51 +82,50 @@ function test(){
 /* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
 back to page.  Also “return” the result so that calculateGradeNeeded() can use it. */
 function calculateCurrentGrade(){
+    // this is where everything with the scores happens.
     var rawScores = [];
     for (var a = 0; a < document.getElementsByClassName("score").length; a++){
-        var individualScore = document.getElementById("s" + a).value;
-        rawScores[a] = individualScore;
+        rawScores.push(document.getElementById("s" + a).value);
     }
     var arrayScores = [];
     for (var i = 0; i < rawScores.length; i++){
         var numbers = convertArrayStringToNumber(rawScores);
-        var average = averageArray(numbers);
-        arrayScores[i] = average;
+        arrayScores.push(averageArray(numbers));
     }
 
+    // this is where the stuff for the weights happens.
     var rawWeights = [];
-    for (var b = 0; a < document.getElementsByClassName("weight").length; b++){
-        var individualWeight = document.getElementById("w" + b).value;
-        rawWeights[b] = individualWeight;
+    for (var b = 0; b < document.getElementsByClassName("weight").length; b++){
+        rawWeights.push(document.getElementById("w" + b).value);
     }
     var arrayWeights = convertArrayStringToNumber(rawWeights);
+
+    // this is where the grade is actually calculated, DOMed into HTML, and finally returned.
     var currentGrade = 0;
     for (var j = 0; j < arrayScores; j++){
         currentGrade += arrayScores[j] * arrayWeights[j] / 100;
     }
-
     document.getElementById("currentResult").innerHTML = "Your current grade is " + currentGrade;
     return currentGrade;
 }
 
 // averageArray() → takes an array of numbers and returns the average of those numbers
-function averageArray(array){
+function averageArray(arr){
     var amount = 0;
-    for (var i = 0; i < array.length; i++){
-        amount += array[i];
+    for (var i = 0; i < arr.length; i++){
+        amount += arr[i];
     }
-    var average = amount / array.length;
-    return average;
+    return amount / arr.length;
 }
 
 /* convertArrayStringToNumber(string) → takes a string of comma separated values (from page) and returns it as an array of
 numbers.  Use string.split(“,”)  to convert a string into an array of strings, then iterate through and convert each
 item in the array into a number like: array[i] = parseInt(array[i]) */
-function convertArrayStringToNumber(string){
-    var gatherArray = string.split(",");
-    var array = [];
-    for (var i = 0; i < string.length; i++){
-        array[i] = parseInt(gatherArray[i]);
+function convertArrayStringToNumber(str){
+    var stringArray = str.split(",");
+    var arr = [];
+    for (var i = 0; i < str.length; i++){
+        arr[i] = parseInt(stringArray[i]);
     }
-    return array;
+    return arr;
 }
