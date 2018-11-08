@@ -62,48 +62,42 @@ the math to determine what the user needs on the final. */
 
 // This is just a test function.
 function test(){
-    document.getElementById("testP").innerHTML = "";
     var rawScores = [];
     for (var a = 0; a < document.getElementsByClassName("score").length; a++){
-        var individualScore = document.getElementById("s" + a).value;
-        rawScores[a] = individualScore;
+        rawScores.push(document.getElementById("s" + a).value);
     }
     var arrayScores = [];
     for (var b = 0; b < rawScores.length; b++){
         var numbers = convertArrayStringToNumber(rawScores);
-        arrayScores[b] = averageArray(numbers);
+        arrayScores.push(averageArray(numbers));
     }
     for (var i = 0; i < rawScores.length; i++){
         document.getElementById("testP").innerHTML += rawScores[i] + " " + arrayScores[i] + " || ";
     }
-    // document.getElementById("testP").innerHTML = rawScores;
 }
 
 /* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
 back to page.  Also “return” the result so that calculateGradeNeeded() can use it. */
 function calculateCurrentGrade(){
     // this is where everything with the scores happens.
-    var rawScores = [];
-    for (var a = 0; a < document.getElementsByClassName("score").length; a++){
-        rawScores.push(document.getElementById("s" + a).value);
-    }
+    var rawScores = document.getElementsByClassName("score");
     var arrayScores = [];
-    for (var i = 0; i < rawScores.length; i++){
-        var numbers = convertArrayStringToNumber(rawScores);
-        arrayScores.push(averageArray(numbers));
+    for (var a = 0; a < rawScores.length; a++){
+        var numbers = convertArrayStringToNumber(rawScores[a].value.toString());
+        arrayScores.push(averageArray(numbers[a]));
     }
 
     // this is where the stuff for the weights happens.
-    var rawWeights = [];
+    var rawWeights = document.getElementsByClassName("weight");
+    var arrayWeights = [];
     for (var b = 0; b < document.getElementsByClassName("weight").length; b++){
-        rawWeights.push(document.getElementById("w" + b).value);
+        arrayWeights.push(convertArrayStringToNumber(rawWeights[b].value.toString()));
     }
-    var arrayWeights = convertArrayStringToNumber(rawWeights);
 
     // this is where the grade is actually calculated, DOMed into HTML, and finally returned.
     var currentGrade = 0;
-    for (var j = 0; j < arrayScores; j++){
-        currentGrade += arrayScores[j] * arrayWeights[j] / 100;
+    for (var c = 0; c < arrayScores.length; c++){
+        currentGrade += arrayScores[c].value * arrayWeights[c].value / 100;
     }
     document.getElementById("currentResult").innerHTML = "Your current grade is " + currentGrade;
     return currentGrade;
