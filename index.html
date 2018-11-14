@@ -9,15 +9,16 @@
     <h1>Grade Calculator</h1>
 </head>
 <body onload = onLoad()>
+<div class = "notice">Hello user! Please note that this program rounds all of the grades to two decimal places.</div>
 <br>
 <table id = "categories"></table>
 <br>
-<input type = "text" id= "categoryTitle" value = "" size= "25"> <button class = "btn btn-info" id = "addCategory" onclick = "addRow()">Add Another Category</button>
-<br>
-<br>
+<div class = "input-group mb-3">
+    <input type ="text" class = "form-control" id = "categoryTitle" placeholder = "Category title" aria-label="Recipient's username" aria-describedby="addCategory"><div class = "input-group-append"><button class = "btn btn-info btn-sm" id = "addCategory" type = "button" onclick = "addRow()">Add Category</button></div>
+</div>
 <button class = "btn btn-primary" id = "currentGrade" onclick = "calculateCurrentGrade()">Calculate Grade</button>
-<p id = "currentResult"></p>
-<table>
+<p class = "result" id = "currentResult"></p>
+<table id = "finalInfo">
     <tr>
         <td class = "title">Desired Final Grade</td>
         <td class = "title">Final Weight</td>
@@ -29,8 +30,6 @@
 </table>
 <br>
 <button class = "btn btn-primary" id = "requiredGrade" onclick = "calculateGradeNeeded()">Calculate Grade Required</button>
-<p id = "requiredResult"></p>
-<br>
-<br>
+<p class = "result" id = "requiredResult"></p>
 </body>
 </html>

@@ -9,13 +9,13 @@ body {
     background-color: aliceblue;
 }
 
-button {
-    font-family: "Arial";
+h1 {
+    font-family: "Times";
+    font-style: italic;
 }
 
-input {
-    text-align: left;
-    display: inline;
+button {
+    font-family: "Arial";
 }
 
 table {
@@ -29,7 +29,31 @@ td {
     width: 50%;
 }
 
-h1 {
-    font-family: "Times";
+input {
+    text-align: left;
+    display: inline;
+}
+
+.notice {
+    font-family: "Times New Roman";
+    font-size: small;
     font-style: italic;
+}
+
+.score, .weight {
+    border: transparent;
+}
+
+.result {
+    font-size: medium;
+}
+
+#categoryTitle, #addCategory {
+    position: relative;
+    bottom: 15px;
+}
+
+#finalInfo {
+    position: relative;
+    top: 10px;
 }

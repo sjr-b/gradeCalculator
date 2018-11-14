@@ -8,11 +8,15 @@ function onLoad(){
 // addRow() Adds a new category/weight row (up to 6)
 function addRow(){
     if (document.getElementById("categories").rows.length < 12){
-        // these are the variables
+        // These are the variables that are u
         var rowNumber = document.getElementById("categories").rows.length / 2;
         var titleRow = document.createElement("tr");
         var firstTitle = document.createElement("td");
+        firstTitle.setAttribute("class", "ft");
+        firstTitle.setAttribute("id", "ft" + rowNumber);
         var secondTitle = document.createElement("td");
+        secondTitle.setAttribute("class", "st");
+        secondTitle.setAttribute("id", "st" + rowNumber);
         if (document.getElementById("categoryTitle").value == ""){
             var categoryTitle = "Homework";
         } else {
@@ -30,69 +34,126 @@ function addRow(){
         weightInput.setAttribute("class", "weight");
         weightInput.setAttribute("id", "w" + rowNumber);
 
-        // this is where everything in the first row is appended
+        // This is where everything in the first row is appended
         titleRow.appendChild(firstTitle);
         titleRow.appendChild(secondTitle);
         document.getElementById("categories").appendChild(titleRow);
 
-        // this is where everything in the second row is appended
+        // This is where everything in the second row is appended
         firstInputContainer.appendChild(scoreInput);
         secondInputContainer.appendChild(weightInput);
         inputRow.appendChild(firstInputContainer);
         inputRow.appendChild(secondInputContainer);
         document.getElementById("categories").appendChild(inputRow);
 
-        // this is where everything is given its names classes, and automatic values
+        // This is where everything is given its text and automatic values.
         firstTitle.innerHTML = categoryTitle + " Scores";
-        secondTitle.innerText = "Percentage Weight";
-        scoreInput.setAttribute("value", "1,3,24,40,42,66,67"); // These are the uniform numbers of (in order, with the exception of 67) Pee Wee Reese, Babe Ruth, Willie Mays, Brian Fuentes, Jackie Robinson, and Yasiel Puig. 67 is the number of seasons that Vin Scully called the Dodgers.
+        secondTitle.innerHTML = "Percentage Weight";
+        scoreInput.setAttribute("value", "1,2,3,22,24,40,42,66,67"); // These are the uniform numbers of (in order, with the exception of 67) Pee Wee Reese, Chase d'Arnaud, Babe Ruth, Clayton Kershaw, Willie Mays, Brian Fuentes, Jackie Robinson, and Yasiel Puig. 67 is the number of seasons that Vin Scully called the Dodgers.
         var weights = document.getElementsByClassName("weight");
-        var rowNumber = document.getElementsByClassName("weight").length;
-        for (var i = 0; i < rowNumber; i++) {
-            weights[i].value = 100 / rowNumber;
+        var rowAmount = document.getElementsByClassName("weight").length;
+        if (rowAmount == 1 || rowAmount == 2 | rowAmount == 4 | rowAmount == 5){
+            for (var a = 0; a < rowAmount; a++) {
+                weights[a].value = 100 / rowAmount;
+            }
+        } else if (rowAmount == 3){
+            weights[0].value = 30;
+            weights[1].value = 30;
+            weights[2].value = 40;
+        } else if (rowAmount == 6){
+            for (var b = 0; b < 5; b++){
+                weights[b].value = 15;
+            }
+            weights[5].value = 25;
         }
     }
+    document.getElementsByClassName("ft").style.backgroundColor = "white";
+    document.getElementsByClassName("st").style.backgroundColor = "white";
+    document.getElementsByClassName("score").style.backgroundColor = "white";
+    document.getElementsByClassName("weight").style.backgroundColor = "white";
 }
 
 /* calculateGradeNeeded() → takes the current grade returned by calculateCurrentGrade() and the grade desired and does
 the math to determine what the user needs on the final. */
 function calculateGradeNeeded(){
-    var desiredGrade = document.getElementById("gradeDesired").value;
     var currentGrade = calculateCurrentGrade();
-    var finalWeight = document.getElementById("finalWeight").value / 100;
-    var neededGrade = (desiredGrade - currentGrade * (1 -finalWeight )) / finalWeight;
-
-    document.getElementById("requiredResult").innerHTML = "You need a minimum grade of " + neededGrade + "% on the final.";
+    if (currentGrade != null){
+        var desiredGrade = document.getElementById("gradeDesired").value;
+        var finalWeight = document.getElementById("finalWeight").value / 100;
+        var neededGrade = (desiredGrade - currentGrade * (1 - finalWeight)) / finalWeight;
+        var roundedNeededGrade = neededGrade.toFixed(2);
+        document.getElementById("requiredResult").innerHTML = "You need a minimum grade of " + roundedNeededGrade + "% on the final.";
+        if (roundedNeededGrade >= 95){
+            document.getElementById("requiredResult").innerHTML += " Good luck!";
+        }
+    } else if (currentGrade == null){
+        document.getElementsByClassName("ft").style.backgroundColor = "white";
+        document.getElementsByClassName("st").style.backgroundColor = "white";
+        document.getElementsByClassName("score").style.backgroundColor = "white";
+        document.getElementsByClassName("weight").style.backgroundColor = "white";
+    }
 }
 
 /* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
 back to page.  Also “return” the result so that calculateGradeNeeded() can use it. */
 function calculateCurrentGrade(){
-    // this is where everything with the scores happens.
+    // This is just to clear the "grade needed" report when people press the "calculate current grade" button, so that the numbers don't mismatch.
+    document.getElementById("currentResult").innerHTML = "";
+    document.getElementById("requiredResult").innerHTML = "";
+
+    // This is where an array of scores is formed, and where the user is notified as to how bad of a grade they have in each section.
     var rawScores = document.getElementsByClassName("score");
     var arrayScores = [];
     for (var a = 0; a < rawScores.length; a++){
         var numbers = convertArrayStringToNumber(rawScores[a].value.toString());
+        for (var d = 0; d < numbers.length; d++){
+            var nanCheck = Number.isNaN(numbers[d]);
+            if (nanCheck == true){
+                alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas. Please recheck your inputs, thank you!");
+                return null;
+            } else if (numbers[d] < 0){
+                alert("It is almost certainly impossible for you to get a negative grade on an assignment. If your teacher really did give you that grade, well... we're sorry.");
+                return null;
+            } else if (110 < numbers[d]){
+                alert("Hello user! We're so sorry, but we don't think that any teacher would give you above 110% on an assignment. Please recheck your numbers. Thank you!");
+                return null;
+            }
+        }
         arrayScores[a] = averageArray(numbers);
+        document.getElementById("ft" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("st" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("s" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("w" + a).style.backgroundColor = giveColor(averageArray(numbers));
     }
 
-    // this is where the stuff for the weights happens.
+    // This is where the weights are all put into an array of numbers.
     var rawWeights = document.getElementsByClassName("weight");
     var arrayWeights = [];
     for (var b = 0; b < rawWeights.length; b++){
         arrayWeights[b] = convertArrayStringToNumber(rawWeights[b].value.toString());
     }
 
-    // this is where the grade is actually calculated, DOMed into HTML, and finally returned.
+    // This checks to make sure that all of the weights actually add up to 100. If not, the user is notified and the page resets.
+    if (checkWeight() != 100){
+        alert("Oops, the weights do not add up to one hundred! Please check them. Thank you!");
+        return null;
+    }
+
+    // This is where the grade is calculated, DOMed onto the page, and then returned.
     var currentGrade = 0;
     for (var c = 0; c < arrayScores.length; c++){
         currentGrade += arrayScores[c] * arrayWeights[c] / 100;
     }
-    document.getElementById("currentResult").innerHTML = "Your current grade is " + currentGrade + "%.";
+    var roundedCurrentGrade = currentGrade.toFixed(2);
+    if (roundedCurrentGrade == NaN){
+        alert("Unfortunately, there seems to be an issue! There appears to be a few words inputted to the scores sections. The only thing that you can have there is numbers and commas. Please recheck your inputs, thank you!");
+        return null;
+    }
+    document.getElementById("currentResult").innerHTML = "Your current grade is " + roundedCurrentGrade + "%.";
     return currentGrade;
 }
 
-// averageArray() → takes an array of numbers and returns the average of those numbers
+// This function takes an array of numbers and averages all of them.
 function averageArray(arr){
     var amount = 0;
     for (var i = 0; i < arr.length; i++){
@@ -101,9 +162,7 @@ function averageArray(arr){
     return amount / arr.length;
 }
 
-/* convertArrayStringToNumber(string) → takes a string of comma separated values (from page) and returns it as an array of
-numbers.  Use string.split(“,”)  to convert a string into an array of strings, then iterate through and convert each
-item in the array into a number like: array[i] = parseInt(array[i]) */
+// This function converts an array of strings into an array of numbers.
 function convertArrayStringToNumber(str){
     var stringArray = str.split(",");
     var arr = [];
@@ -111,4 +170,35 @@ function convertArrayStringToNumber(str){
         arr[i] = parseInt(stringArray[i]);
     }
     return arr;
+}
+
+function giveColor(grade){
+    if (grade == null){
+        return "white";
+    } else if (grade < 60){
+         return "indianred";
+    } else if (60 <= grade && grade < 70){
+        return "lightsalmon";
+    } else if (70 <= grade && grade < 80){
+        return "lightgoldenrodyellow";
+    } else if (80 <= grade && grade < 90){
+        return "lightcyan";
+    } else if (90 <= grade && grade < 100){
+        return "lightgreen";
+    } else if (100 <= grade){
+        return "green";
+    }
+}
+
+function checkWeight(){
+    var raw = document.getElementsByClassName("weight");
+    var arrComp = [];
+    for (var i = 0; i < raw.length; i++){
+        arrComp[i] = parseFloat(raw[i].value.toString());
+    }
+    var count = 0;
+    for (var j = 0; j < arrComp.length; j++){
+        count += arrComp[j];
+    }
+    return count;
 }
