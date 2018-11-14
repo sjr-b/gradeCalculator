@@ -65,10 +65,12 @@ function addRow(){
             weights[5].value = 25;
         }
     }
-    document.getElementsByClassName("ft").style.backgroundColor = "white";
-    document.getElementsByClassName("st").style.backgroundColor = "white";
-    document.getElementsByClassName("score").style.backgroundColor = "white";
-    document.getElementsByClassName("weight").style.backgroundColor = "white";
+    for (var i = 0; i < document.getElementById("categories").rows.length / 2; i++){
+        document.getElementById("ft" + i).style.backgroundColor = "white";
+        document.getElementById("st" + i).style.backgroundColor = "white";
+        document.getElementById("ic" + i).style.backgroundColor = "white";
+        document.getElementById("sic" + i).style.backgroundColor = "white";
+    }
 }
 
 // This calculates the grade that the user needs to get on their final.
@@ -82,7 +84,7 @@ function calculateGradeNeeded(){
         if (0 < roundedNeededGrade){
             document.getElementById("requiredResult").innerHTML = "You need a minimum grade of " + roundedNeededGrade + "% on the final.";
         } else {
-            document.getElementById("requiredResult").innerHTML = "You could score a zero on the test and still get a " + desiredGrade + "% in the class! Wow, good job!";
+            document.getElementById("requiredResult").innerHTML = "You could score a zero on the final and still get a " + desiredGrade + "% in the class! Wow, good job!";
         }
         if (95 <= roundedNeededGrade && roundedNeededGrade <= 100){
             document.getElementById("requiredResult").innerHTML += " Good luck!";
@@ -91,10 +93,12 @@ function calculateGradeNeeded(){
         }
     } else {
         // These are just to reset the colors in case something went wrong.
-        document.getElementsByClassName("ft").style.backgroundColor = "white";
-        document.getElementsByClassName("st").style.backgroundColor = "white";
-        document.getElementsByClassName("score").style.backgroundColor = "white";
-        document.getElementsByClassName("weight").style.backgroundColor = "white";
+        for (var i = 0; i < document.getElementById("categories").rows.length / 2; i++){
+            document.getElementById("ft" + i).style.backgroundColor = "white";
+            document.getElementById("st" + i).style.backgroundColor = "white";
+            document.getElementById("ic" + i).style.backgroundColor = "white";
+            document.getElementById("sic" + i).style.backgroundColor = "white";
+        }
     }
 }
 
@@ -125,7 +129,7 @@ function calculateCurrentGrade(){
         for (var d = 0; d < numbers.length; d++){
             var nanCheck = Number.isNaN(numbers[d]);
             if (nanCheck == true){
-                alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas. Please recheck your inputs, thank you!");
+                alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas (in the exact format of #,#,#,#). Please recheck your inputs, thank you!");
                 return null;
             } else if (numbers[d] < 0){
                 alert("Hi! Please recheck your scores, as it seems that one of them is negative. It is almost certainly impossible for you to get a negative grade on an assignment. If your teacher really did give you that grade, well... I'm sorry.");
