@@ -89,7 +89,7 @@ function calculateGradeNeeded(){
         if (95 <= roundedNeededGrade && roundedNeededGrade <= 100){
             document.getElementById("requiredResult").innerHTML += " Good luck!";
         } else if (100 < roundedNeededGrade){
-            document.getElementById("requiredResult").innerHTML += "Best of luck!";
+            document.getElementById("requiredResult").innerHTML += " Best of luck!";
         }
     } else {
         // These are just to reset the colors in case something went wrong.
@@ -106,7 +106,6 @@ function calculateGradeNeeded(){
 function calculateCurrentGrade(){
     // This is just to clear the "grade needed" report when people press the "calculate current grade" button, so that the numbers don't mismatch.
     document.getElementById("currentResult").innerHTML = "";
-    document.getElementById("requiredResult").innerHTML = "";
 
     // This is where the weights are all put into an array of numbers.
     var rawWeights = document.getElementsByClassName("weight");
