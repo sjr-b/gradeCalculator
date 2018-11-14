@@ -30,6 +30,7 @@ td {
 }
 
 input {
+    border: transparent;
     text-align: left;
     display: inline;
 }
@@ -41,7 +42,7 @@ input {
 }
 
 .score, .weight {
-    border: transparent;
+    background: transparent;
 }
 
 .result {
@@ -51,6 +52,12 @@ input {
 #categoryTitle, #addCategory {
     position: relative;
     bottom: 15px;
+}
+
+#categoryTitle {
+    border: 1px solid darkcyan;
+    border-radius: 4px;
+    height: 28px;
 }
 
 #finalInfo {

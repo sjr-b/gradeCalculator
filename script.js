@@ -1,11 +1,9 @@
-// NO GLOBAL VARIABLES. EVER. DON'T EVEN THINK ABOUT IT.
-
 // This is the automatic function, and happens when the page is loaded.
 function onLoad(){
     addRow();
 }
 
-// addRow() Adds a new category/weight row (up to 6)
+// This adds two new rows, one for the title and another for the inputs.
 function addRow(){
     if (document.getElementById("categories").rows.length < 12){
         // These are the variables that are u
@@ -26,13 +24,13 @@ function addRow(){
 
         var inputRow = document.createElement("tr");
         var firstInputContainer = document.createElement("td");
+        firstInputContainer.setAttribute("id", "ic" + rowNumber);
         var secondInputContainer = document.createElement("td");
+        secondInputContainer.setAttribute("id", "sic" + rowNumber);
         var scoreInput = document.createElement("input");
         scoreInput.setAttribute("class", "score");
-        scoreInput.setAttribute("id", "s" + rowNumber);
         var weightInput = document.createElement("input");
         weightInput.setAttribute("class", "weight");
-        weightInput.setAttribute("id", "w" + rowNumber);
 
         // This is where everything in the first row is appended
         titleRow.appendChild(firstTitle);
@@ -73,8 +71,7 @@ function addRow(){
     document.getElementsByClassName("weight").style.backgroundColor = "white";
 }
 
-/* calculateGradeNeeded() → takes the current grade returned by calculateCurrentGrade() and the grade desired and does
-the math to determine what the user needs on the final. */
+// This calculates the grade that the user needs to get on their final.
 function calculateGradeNeeded(){
     var currentGrade = calculateCurrentGrade();
     if (currentGrade != null){
@@ -82,11 +79,18 @@ function calculateGradeNeeded(){
         var finalWeight = document.getElementById("finalWeight").value / 100;
         var neededGrade = (desiredGrade - currentGrade * (1 - finalWeight)) / finalWeight;
         var roundedNeededGrade = neededGrade.toFixed(2);
-        document.getElementById("requiredResult").innerHTML = "You need a minimum grade of " + roundedNeededGrade + "% on the final.";
-        if (roundedNeededGrade >= 95){
-            document.getElementById("requiredResult").innerHTML += " Good luck!";
+        if (0 < roundedNeededGrade){
+            document.getElementById("requiredResult").innerHTML = "You need a minimum grade of " + roundedNeededGrade + "% on the final.";
+        } else {
+            document.getElementById("requiredResult").innerHTML = "You could score a zero on the test and still get a " + desiredGrade + "% in the class! Wow, good job!";
         }
-    } else if (currentGrade == null){
+        if (95 <= roundedNeededGrade && roundedNeededGrade <= 100){
+            document.getElementById("requiredResult").innerHTML += " Good luck!";
+        } else if (100 < roundedNeededGrade){
+            document.getElementById("requiredResult").innerHTML += "Best of luck!";
+        }
+    } else {
+        // These are just to reset the colors in case something went wrong.
         document.getElementsByClassName("ft").style.backgroundColor = "white";
         document.getElementsByClassName("st").style.backgroundColor = "white";
         document.getElementsByClassName("score").style.backgroundColor = "white";
@@ -94,37 +98,11 @@ function calculateGradeNeeded(){
     }
 }
 
-/* calculateCurrentGrade() → takes data from page, calls on sub-functions to calculate the student grade and output it
-back to page.  Also “return” the result so that calculateGradeNeeded() can use it. */
+// This calculates what grade the student currently has.
 function calculateCurrentGrade(){
     // This is just to clear the "grade needed" report when people press the "calculate current grade" button, so that the numbers don't mismatch.
     document.getElementById("currentResult").innerHTML = "";
     document.getElementById("requiredResult").innerHTML = "";
-
-    // This is where an array of scores is formed, and where the user is notified as to how bad of a grade they have in each section.
-    var rawScores = document.getElementsByClassName("score");
-    var arrayScores = [];
-    for (var a = 0; a < rawScores.length; a++){
-        var numbers = convertArrayStringToNumber(rawScores[a].value.toString());
-        for (var d = 0; d < numbers.length; d++){
-            var nanCheck = Number.isNaN(numbers[d]);
-            if (nanCheck == true){
-                alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas. Please recheck your inputs, thank you!");
-                return null;
-            } else if (numbers[d] < 0){
-                alert("It is almost certainly impossible for you to get a negative grade on an assignment. If your teacher really did give you that grade, well... we're sorry.");
-                return null;
-            } else if (110 < numbers[d]){
-                alert("Hello user! We're so sorry, but we don't think that any teacher would give you above 110% on an assignment. Please recheck your numbers. Thank you!");
-                return null;
-            }
-        }
-        arrayScores[a] = averageArray(numbers);
-        document.getElementById("ft" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("st" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("s" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("w" + a).style.backgroundColor = giveColor(averageArray(numbers));
-    }
 
     // This is where the weights are all put into an array of numbers.
     var rawWeights = document.getElementsByClassName("weight");
@@ -138,6 +116,33 @@ function calculateCurrentGrade(){
         alert("Oops, the weights do not add up to one hundred! Please check them. Thank you!");
         return null;
     }
+
+    // This is where an array of scores is formed, and where the user is notified as to how bad of a grade they have in each section.
+    var rawScores = document.getElementsByClassName("score");
+    var arrayScores = [];
+    for (var a = 0; a < rawScores.length; a++){
+        var numbers = convertArrayStringToNumber(rawScores[a].value.toString());
+        for (var d = 0; d < numbers.length; d++){
+            var nanCheck = Number.isNaN(numbers[d]);
+            if (nanCheck == true){
+                alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas. Please recheck your inputs, thank you!");
+                return null;
+            } else if (numbers[d] < 0){
+                alert("Hi! Please recheck your scores, as it seems that one of them is negative. It is almost certainly impossible for you to get a negative grade on an assignment. If your teacher really did give you that grade, well... I'm sorry.");
+                return null;
+            } else if (110 < numbers[d]){
+                alert("Hello user! We're so sorry, but we don't think that any teacher would give you above 110% on an assignment. Please recheck your numbers. Thank you!");
+                return null;
+            }
+        }
+        arrayScores[a] = averageArray(numbers);
+        // These colors will indicate to the user how their grade in each section is.
+        document.getElementById("ft" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("st" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("ic" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("sic" + a).style.backgroundColor = giveColor(averageArray(numbers));
+    }
+
 
     // This is where the grade is calculated, DOMed onto the page, and then returned.
     var currentGrade = 0;
@@ -172,6 +177,7 @@ function convertArrayStringToNumber(str){
     return arr;
 }
 
+// This function just returns the color that the program should give each section based on the grade. It is based pretty heavily off of Illuminate.
 function giveColor(grade){
     if (grade == null){
         return "white";
@@ -190,6 +196,8 @@ function giveColor(grade){
     }
 }
 
+
+// This function checks all of the weights to make sure that they all add up to 100%.
 function checkWeight(){
     var raw = document.getElementsByClassName("weight");
     var arrComp = [];
@@ -202,3 +210,5 @@ function checkWeight(){
     }
     return count;
 }
+
+// This is a secret comment. Not really, just saying hi to whoever happens to be reading this. Hello!
