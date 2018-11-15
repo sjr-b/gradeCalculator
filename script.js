@@ -10,10 +10,8 @@ function addRow(){
         var rowNumber = document.getElementById("categories").rows.length / 2;
         var titleRow = document.createElement("tr");
         var firstTitle = document.createElement("td");
-        firstTitle.setAttribute("class", "ft");
         firstTitle.setAttribute("id", "ft" + rowNumber);
         var secondTitle = document.createElement("td");
-        secondTitle.setAttribute("class", "st");
         secondTitle.setAttribute("id", "st" + rowNumber);
         if (document.getElementById("categoryTitle").value == ""){
             var categoryTitle = "Homework";
@@ -47,7 +45,7 @@ function addRow(){
         // This is where everything is given its text and automatic values.
         firstTitle.innerHTML = categoryTitle + " Scores";
         secondTitle.innerHTML = "Percentage Weight";
-        scoreInput.setAttribute("value", "1,2,3,22,24,40,42,66,67"); // These are the uniform numbers of (in order, with the exception of 67) Pee Wee Reese, Chase d'Arnaud, Babe Ruth, Clayton Kershaw, Willie Mays, Brian Fuentes, Jackie Robinson, and Yasiel Puig. 67 is the number of seasons that Vin Scully called the Dodgers.
+        scoreInput.setAttribute("value", "1,2,22,24,40,42,66,67"); // These are the uniform numbers of (in order, with the exception of 67) Pee Wee Reese, Chase d'Arnaud, Clayton Kershaw, Willie Mays, Brian Fuentes, Jackie Robinson, and Yasiel Puig. 67 is the number of seasons that Vin Scully called the Dodgers.
         var weights = document.getElementsByClassName("weight");
         var rowAmount = document.getElementsByClassName("weight").length;
         if (rowAmount == 1 || rowAmount == 2 | rowAmount == 4 | rowAmount == 5){
@@ -92,7 +90,7 @@ function calculateGradeNeeded(){
             document.getElementById("requiredResult").innerHTML += " Best of luck!";
         }
     } else {
-        // These are just to reset the colors in case something went wrong.
+        // This is just to reset the colors in case something went wrong.
         for (var i = 0; i < document.getElementById("categories").rows.length / 2; i++){
             document.getElementById("ft" + i).style.backgroundColor = "white";
             document.getElementById("st" + i).style.backgroundColor = "white";
@@ -104,7 +102,6 @@ function calculateGradeNeeded(){
 
 // This calculates what grade the student currently has.
 function calculateCurrentGrade(){
-    // This is just to clear the "grade needed" report when people press the "calculate current grade" button, so that the numbers don't mismatch.
     document.getElementById("currentResult").innerHTML = "";
 
     // This is where the weights are all put into an array of numbers.
@@ -125,9 +122,14 @@ function calculateCurrentGrade(){
     var arrayScores = [];
     for (var a = 0; a < rawScores.length; a++){
         var numbers = convertArrayStringToNumber(rawScores[a].value.toString());
+        arrayScores[a] = averageArray(numbers);
+        // These colors will indicate to the user how their grade in each section is.
+        document.getElementById("ft" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("st" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("ic" + a).style.backgroundColor = giveColor(averageArray(numbers));
+        document.getElementById("sic" + a).style.backgroundColor = giveColor(averageArray(numbers));
         for (var d = 0; d < numbers.length; d++){
-            var nanCheck = Number.isNaN(numbers[d]);
-            if (nanCheck == true){
+            if (isNaN(numbers[d]) == true){
                 alert("Unfortunately, there seems to be an issue! Your inputs are either incomplete or contain something other than numbers or commas (in the exact format of #,#,#,#). Please recheck your inputs, thank you!");
                 return null;
             } else if (numbers[d] < 0){
@@ -138,12 +140,6 @@ function calculateCurrentGrade(){
                 return null;
             }
         }
-        arrayScores[a] = averageArray(numbers);
-        // These colors will indicate to the user how their grade in each section is.
-        document.getElementById("ft" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("st" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("ic" + a).style.backgroundColor = giveColor(averageArray(numbers));
-        document.getElementById("sic" + a).style.backgroundColor = giveColor(averageArray(numbers));
     }
 
 
@@ -153,10 +149,6 @@ function calculateCurrentGrade(){
         currentGrade += arrayScores[c] * arrayWeights[c] / 100;
     }
     var roundedCurrentGrade = currentGrade.toFixed(2);
-    if (roundedCurrentGrade == NaN){
-        alert("Unfortunately, there seems to be an issue! There appears to be a few words inputted to the scores sections. The only thing that you can have there is numbers and commas. Please recheck your inputs, thank you!");
-        return null;
-    }
     document.getElementById("currentResult").innerHTML = "Your current grade is " + roundedCurrentGrade + "%.";
     return currentGrade;
 }
@@ -182,10 +174,8 @@ function convertArrayStringToNumber(str){
 
 // This function just returns the color that the program should give each section based on the grade. It is based pretty heavily off of Illuminate.
 function giveColor(grade){
-    if (grade == null){
-        return "white";
-    } else if (grade < 60){
-         return "indianred";
+    if (grade < 60){
+        return "indianred";
     } else if (60 <= grade && grade < 70){
         return "lightsalmon";
     } else if (70 <= grade && grade < 80){
@@ -196,6 +186,8 @@ function giveColor(grade){
         return "lightgreen";
     } else if (100 <= grade){
         return "green";
+    } else {
+        return "white";
     }
 }
 
